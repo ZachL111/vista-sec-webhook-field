@@ -1,0 +1,10 @@
+{
+  "name": "zachl111/vista-sec-webhook-field",
+  "description": "Implement a PHP security tooling project for webhook format conversion, using round-trip fixtures and lossless normalization checks.",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Portfolio\\": "src/"
+    }
+  }
+}
