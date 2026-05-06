@@ -1,0 +1,17 @@
+{
+  "repo": "vista-sec-webhook-field",
+  "thresholds": {
+    "signal": 2,
+    "slack": 1,
+    "confidence": 2,
+    "drag": 2,
+    "ship": 151,
+    "watch": 107
+  },
+  "terms": [
+    "trust boundary",
+    "claim drift",
+    "replay exposure",
+    "policy width"
+  ]
+}
