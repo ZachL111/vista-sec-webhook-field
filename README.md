@@ -1,68 +1,40 @@
 # vista-sec-webhook-field
 
-`vista-sec-webhook-field` is a focused PHP codebase around implement a PHP security tooling project for webhook format conversion, using round-trip fixtures and lossless normalization checks. It is meant to be easy to inspect, run, and extend without a hosted service.
+`vista-sec-webhook-field` keeps a focused PHP implementation around security tooling. The project goal is to implement a PHP security tooling project for webhook format conversion, using round-trip fixtures and lossless normalization checks.
 
-## Vista Sec Webhook Field Walkthrough
+## Why I Keep It Small
 
-I would read the project from the outside in: command, fixture, model, then roadmap. That keeps the security tooling idea grounded in files that can be checked locally.
+The project exists to keep a narrow engineering decision visible and testable. For this repo, that decision is how trust boundary and replay exposure should influence a review result.
 
-## How It Is Put Together
+## Vista Sec Webhook Field Review Notes
 
-The interesting part is the boundary between accepted and reviewed scenarios. Extended examples sit near that boundary so future edits can show whether the model became more permissive or more cautious. The PHP implementation uses strict types and a small namespaced policy class.
+`recovery` and `baseline` are the cases worth reading first. They show the optimistic and cautious ends of the fixture.
 
-## Reason For The Project
+## Included Behavior
 
-I use this kind of project to make a rule visible before adding more machinery around it. The important part here is not the size of the codebase. It is that the input signals, scoring rule, fixture data, and expected output can all be checked in one sitting.
+- `fixtures/domain_review.csv` adds cases for trust boundary and claim drift.
+- `metadata/domain-review.json` records the same cases in structured form.
+- `config/review-profile.json` captures the read order and the two review questions.
+- `examples/vista-sec-webhook-walkthrough.md` walks through the case spread.
+- The PHP code includes a review path for `policy width` and `trust boundary`.
+- `docs/field-notes.md` explains the strongest and weakest cases.
 
-## Capabilities
+## Internal Model
 
-- Uses fixture data to keep policy checks changes visible in code review.
-- Includes extended examples for replay guards, including `surge` and `degraded`.
-- Documents claim validation tradeoffs in `docs/operations.md`.
-- Runs locally with a single verification command and no external credentials.
-- Stores project constants and verification metadata in `metadata/project.json`.
+The implementation keeps the scoring rule plain: reward signal and confidence, preserve slack, penalize drag, then classify the result into a review lane.
 
-## Data Notes
+The added PHP path is deliberately direct, with fixtures doing most of the explaining.
 
-`recovery` is the first example I would inspect because it lands on the `accept` path with a score of 216. The broader file also keeps `degraded` at -9 and `surge` at 243, which gives the model a useful low-to-high spread.
-
-## Where Things Live
-
-- `src`: primary implementation
-- `tests`: verification harness
-- `fixtures`: compact golden scenarios
-- `examples`: expanded scenario set
-- `metadata`: project constants and verification metadata
-- `docs`: operations and extension notes
-- `scripts`: local verification and audit commands
-
-## Getting It Running
-
-The only required setup is the local PHP toolchain. After cloning, stay in the repo root so fixture paths resolve correctly.
-
-## Command Examples
+## Try It Locally
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-This runs the language-level build or test path against the compact fixture set.
+## Validation
 
-## Check The Work
+The verifier is intentionally local. It should fail if the fixture score math, lane assignment, or language-specific test drifts.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
-```
+## Scope
 
-The audit command checks repository structure and README constraints before it delegates to the verifier.
-
-## Tradeoffs
-
-The scoring model is simple by design. More domain-specific behavior should be added through explicit adapters or extra fixture classes rather than hidden constants.
-
-## Possible Extensions
-
-- Add a loader for `examples/extended_cases.csv` and promote selected cases into the language test suite.
-- Add a short report command that prints the score breakdown for a single scenario.
-- Add malformed input fixtures so the failure path is as visible as the happy path.
-- Add one more security tooling fixture that focuses on a malformed or borderline input.
+No external service is required. A deeper version would add more negative cases and a clearer boundary around invalid input.

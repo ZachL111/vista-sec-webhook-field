@@ -1,0 +1,73 @@
+{
+  "repo": "vista-sec-webhook-field",
+  "language": "PHP",
+  "category": "Security tooling",
+  "goal": "Implement a PHP security tooling project for webhook format conversion, using round-trip fixtures and lossless normalization checks.",
+  "review_model": {
+    "terms": [
+      "trust boundary",
+      "claim drift",
+      "replay exposure",
+      "policy width"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "trust boundary",
+      "signal": 50,
+      "slack": 49,
+      "drag": 19,
+      "confidence": 58,
+      "score": 150,
+      "lane": "ship"
+    },
+    {
+      "name": "stress",
+      "focus": "claim drift",
+      "signal": 75,
+      "slack": 41,
+      "drag": 9,
+      "confidence": 48,
+      "score": 212,
+      "lane": "ship"
+    },
+    {
+      "name": "edge",
+      "focus": "replay exposure",
+      "signal": 60,
+      "slack": 45,
+      "drag": 8,
+      "confidence": 45,
+      "score": 186,
+      "lane": "ship"
+    },
+    {
+      "name": "recovery",
+      "focus": "policy width",
+      "signal": 81,
+      "slack": 50,
+      "drag": 8,
+      "confidence": 45,
+      "score": 233,
+      "lane": "ship"
+    },
+    {
+      "name": "stale",
+      "focus": "trust boundary",
+      "signal": 86,
+      "slack": 43,
+      "drag": 17,
+      "confidence": 45,
+      "score": 209,
+      "lane": "ship"
+    }
+  ]
+}
